@@ -12,18 +12,24 @@ using std::string;
 //Sort of based on solution from stack overflow, may need rewrite as it seems to have memory leak in valgrind
 void HTTP_Response::base64(unsigned char const* input, int length, char** buffer)
 {
-    BIO *bmem, *b64;
-    BUF_MEM *bptr;
-    b64 = BIO_new(BIO_f_base64());//This seems to be the source of some memory leaks that need to be resolved
+    if ( (input != NULL) && (input[0] == (char)0) ) {
+		*buffer = (char*)"";
+    }
+	else {
+		BIO *bmem, *b64;
+    	BUF_MEM *bptr;
+   		b64 = BIO_new(BIO_f_base64());//This seems to be the source of some memory leaks that need to be resolved
     bmem = BIO_new(BIO_s_mem());
-    b64 = BIO_push(b64, bmem);
-    BIO_write(b64, input, length);
-    BIO_flush(b64);
-    BIO_get_mem_ptr(b64, &bptr);
-    *buffer = new char[bptr->length];
-    memcpy(*buffer, bptr->data, bptr->length);
-    (*buffer)[bptr->length - 1] = 0;
-    BIO_free_all(b64); // This should stop the memory leak
+   		b64 = BIO_push(b64, bmem);
+    	BIO_write(b64, input, length);
+   	 	BIO_flush(b64);
+    	BIO_get_mem_ptr(b64, &bptr);
+    	*buffer = new char[bptr->length];
+   		memcpy(*buffer, bptr->data, bptr->length);
+    	(*buffer)[bptr->length - 1] = 0;
+    	BIO_free_all(b64); // This should stop the memory leak
+		
+    }
 }
 
 string HTTP_Response::generateWebSocketAcceptVal(const string& clientKey)
