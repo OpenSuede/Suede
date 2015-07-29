@@ -1,10 +1,10 @@
 #include <iostream>
 #include <stdio.h>
-#include <ctime>
 #include <mutex>
-#include <log.hpp>
 #include <string>
+#include <log.hpp>
 
+// Static Variables
 FILE * Log::LogFile = NULL;
 bool Log::LogToConsole = false;
 time_t Log::t = time(0);
@@ -13,12 +13,18 @@ char Log::FormattedTime[80];
 
 const char Log::LogFileName[128] = "./log/LOGFILE"; // This will eventually be replaced with a config file variable
 
+// Thread Blocking Objects
 std::mutex AccessLog;
 std::mutex Logging;
 std::mutex Clock;
 
 char * Log::TimeStamp(void)
 {
+	/*
+	Returns a formatted timestamp string for use in logged messages.
+	TimeStamp format should be set from log config file.
+	*/
+	
 	Clock.lock();
 	time_t t = time(0);
 	struct tm * SysTime = localtime(&t);
@@ -27,18 +33,36 @@ char * Log::TimeStamp(void)
 	return FormattedTime;
 }
 
-void Log::Initialize(void)
+bool Log::Initialize(void)
 {
-	// Default initialization to type 0 (log to file)
+	/*
+	Default log initialization to type 0 (log to file)
+	*/
 	
+	if ((LogFile != NULL) or (LogToConsole != false))
+	{
+		return false;
+	}
+		
 	Logging.lock();
 	LogFile = fopen(LogFileName, "a"); // REPLACE WITH DYNAMIC CONFIG FILE HOOK
 	LogToConsole = false;
+	return true;
 }
 
-void Log::Initialize(int type)
+bool Log::Initialize(int type)
 {
-	// Type 0: log to file || Type 1: log to console || Type 2: log to file and console
+	/*
+	Parameterized log initialization
+	Type 0: log to file
+	Type 1: log to console
+	Type 2: log to file and console
+	*/
+	
+	if ((LogFile != NULL) or (LogToConsole != false))
+	{
+		return false;
+	}
 	
 	Logging.lock();
 	switch(type) {
@@ -48,11 +72,11 @@ void Log::Initialize(int type)
 		t = time(0);
 		SysTime = localtime(&t);
 		fprintf(LogFile, "%s Logging Initialized (File Only)\n", TimeStamp());
-		break;
+		return true;
 	case 1:
 		LogToConsole = true;
 		std::cerr << "Logging Initialized (Console Only)" << std::endl;
-		break;
+		return true;
 	case 2:
 		LogFile = fopen(LogFileName, "a"); // REPLACE WITH DYNAMIC CONFIG FILE HOOK
 		LogToConsole = true;
@@ -60,12 +84,24 @@ void Log::Initialize(int type)
 		SysTime = localtime(&t);
 		std::cerr << "Logging Initialized (Console and File)" << std::endl;
 		fprintf(LogFile, "%s Logging Initialized (Console and File)\n", TimeStamp());
-		break;
+		return true;
 	}
 }
 
-void Log::LogEvent(int MType, const char * Msg)
+bool Log::LogEvent(int MType, const char * Msg)
 {
+	/*
+	Logs an event of a given type
+	Type 0: Error
+	Type 1: Warning
+	Type 2: Debugging Message
+	*/
+	
+	if ((LogFile == NULL) and (LogToConsole == false))
+	{
+		return false;
+	}
+	
 	AccessLog.lock();
 	
 	// this will be replaced with config file hooks
@@ -99,22 +135,28 @@ void Log::LogEvent(int MType, const char * Msg)
 		fprintf(LogFile,"%s %s %s\n", TimeStamp(), MsgType, Msg);
 	}
 	AccessLog.unlock();
+	return true;
 }
 
-void Log::Finalize(void)
+bool Log::Finalize(void)
 {
-	t = time(0);
+	/*
+	Runs log cleanup
+	*/
+	
+	if ((LogFile == NULL) and (LogToConsole == false))
+	{
+		return false;
+	}
+	
 	if (LogFile != NULL)
 	{
-		fprintf(LogFile, "\n");
 		fclose(LogFile);
 		LogFile = NULL;
 	}
 	
-	if (LogToConsole)
-	{
-		LogToConsole = false;
-	}
+	LogToConsole = false;
 	
 	Logging.unlock();
+	return true;
 }
