@@ -1,8 +1,7 @@
-#ifndef SUEDE_LOG_H_
-#define SUEDE_LOG_H_
+#ifndef SUEDE_LOG_H
+#define SUEDE_LOG_H
 
 #include <stdio.h>
-#include <ctime>
 #include <string>
 
 class Log
@@ -17,10 +16,10 @@ class Log
 	
 	public:
 	static char * TimeStamp(void);
-	static void Initialize(void);
-	static void Initialize(int);
-	static void LogEvent(int, const char *);
-	static void Finalize(void);
+	static bool Initialize(void);
+	static bool Initialize(int);
+	static bool LogEvent(int, const char *);
+	static bool Finalize(void);
 };
 
-#endif // SUEDE_LOG_H_
+#endif
