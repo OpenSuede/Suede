@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <mutex>
 
 class Log
 {
@@ -13,12 +14,16 @@ class Log
 	static char FormattedTime[80];
 	
 	static const char LogFileName[128]; // This will be replaced with a config file variable eventually
+	static std::mutex AccessLog;
+	static std::mutex Logging;
+	static std::mutex Clock;
 	
 	public:
 	static char * TimeStamp(void);
 	static bool Initialize(void);
 	static bool Initialize(int);
 	static bool LogEvent(int, const char *);
+	static bool LogEvent(int, std::string);
 	static bool Finalize(void);
 };
 
