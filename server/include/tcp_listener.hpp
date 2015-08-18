@@ -8,6 +8,7 @@ using std::string;
 class TCP_Listener
 {
 private:
+	int socketFileDescriptor;
     std::vector<std::thread*> connectedThreads;
 	void listenForTCPConnections();
 	//void listenToConnectedSocket(int);
@@ -15,6 +16,7 @@ private:
 	//void performHTTPHandshake(int);
 public:
     TCP_Listener();
+	~TCP_Listener();
 };
 
 #endif
