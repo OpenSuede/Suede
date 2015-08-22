@@ -14,9 +14,9 @@ char Log::FormattedTime[80];
 const char Log::LogFileName[128] = "./log/LOGFILE"; // This will eventually be replaced with a config file variable
 
 // Thread Blocking Objects
-std::mutex AccessLog;
-std::mutex Logging;
-std::mutex Clock;
+std::mutex Log::AccessLog;
+std::mutex Log::Logging;
+std::mutex Log::Clock;
 
 char * Log::TimeStamp(void)
 {
@@ -136,6 +136,11 @@ bool Log::LogEvent(int MType, const char * Msg)
 	}
 	AccessLog.unlock();
 	return true;
+}
+
+bool Log::LogEvent(int MType, std::string Msg)
+{
+	return Log::LogEvent(MType, Msg.c_str());
 }
 
 bool Log::Finalize(void)

@@ -19,7 +19,7 @@ void HTTP_Response::base64(unsigned char const* input, int length, char** buffer
 		BIO *bmem, *b64;
     	BUF_MEM *bptr;
    		b64 = BIO_new(BIO_f_base64());//This seems to be the source of some memory leaks that need to be resolved
-    bmem = BIO_new(BIO_s_mem());
+		bmem = BIO_new(BIO_s_mem());
    		b64 = BIO_push(b64, bmem);
     	BIO_write(b64, input, length);
    	 	BIO_flush(b64);
@@ -36,22 +36,11 @@ string HTTP_Response::generateWebSocketAcceptVal(const string& clientKey)
 {
 	unsigned char hashResult[20];
 	char *outBuffer = NULL;
-//	printf("Client Key:%s\n", clientKey.c_str());
 	string localKeyCopy(clientKey.c_str());
-//	printf("Local Client Key:%s\n", localKeyCopy.c_str());
 	string guid("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
-//	printf("GUID:%s\n", guid.c_str());
 	string combined = clientKey + guid;
-//	printf("Combined Key cat GUID:%s\n", combined.c_str());
 	SHA1((const unsigned char*) combined.c_str(), combined.size(), hashResult);
-/*	printf("Hash result:");
-    for (int i = 0; i < 20; i++)
-    {
-        printf("%02X", hashResult[i]);
-    }
-	printf("\n");*/
 	base64(hashResult, 20, &outBuffer);
- //   printf("Base64Encoded:%s\n", outBuffer);
 	string finalString(outBuffer);
 	delete[] outBuffer;
 	return finalString;
