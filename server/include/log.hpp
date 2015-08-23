@@ -22,6 +22,11 @@ class Log
 	static std::mutex Clock;
 	
 	public:
+	static int ERROR;
+	static int WARN;
+	static int DEBUG;
+	static int TRAFFIC;
+	
 	static char * TimeStamp(void);
 	static bool Initialize(void);
 	static bool Initialize(int);
