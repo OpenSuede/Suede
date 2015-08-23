@@ -64,7 +64,7 @@ void TCP_Listener::listenForTCPConnections()
 	System_Signal::registerSocketUse(socketFileDescriptor); //to break out of listen once blocked if system shuts down
 
     while(System_Signal::exitActivated() == false){//continue until the system is ready to shut down
-		Log::LogEvent(2,"Listening for for new client connections...");
+		Log::LogEvent(2,"Listening for new client connections...");
 
         listen(socketFileDescriptor,5);
         clilen = sizeof(cli_addr);
