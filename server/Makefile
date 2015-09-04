@@ -8,7 +8,7 @@ APPLICATION_NAME=suede
 MAIN_FILE=main.cpp
 TEST_APPLICATION_NAME=suede_test
 MAIN_TEST_FILE=test_main.cpp
-FILES=log.cpp http_request.cpp http_response.cpp tcp_listener.cpp http_listener.cpp websocket_listener.cpp user_input_listener.cpp system_signal.cpp websocket_frame.cpp config.cpp
+FILES=log.cpp http_request.cpp http_response.cpp tcp_listener.cpp http_listener.cpp websocket_listener.cpp user_input_listener.cpp system_signal.cpp websocket_frame.cpp
 SOURCES = $(FILES:%.cpp=$(SOURCE_PATH)/%.cpp)
 OBJ=$(FILES:%.cpp=$(BUILD_PATH)/%.o)
 TEST_SRC=$(FILES:%.cpp=$(TEST_PATH)/%_test.cpp)
@@ -34,7 +34,6 @@ runtest: test
 	
 folders:
 	mkdir -p $(BIN_PATH) $(BUILD_PATH) $(LOG_PATH)
-	sudo ln -s $(LOG_PATH) $(BIN_PATH)/$(LOG_PATH)
 	
 clean:
 	rm -f $(BUILD_PATH)/*.o $(BIN_PATH)/$(APPLICATION_NAME) $(LOG_PATH)/*.log

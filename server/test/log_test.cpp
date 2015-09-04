@@ -14,23 +14,23 @@ TEST(Log, PreExisting) {
 
 TEST(Log, Correct) {
 	EXPECT_TRUE(Log::Initialize(0));
-	EXPECT_TRUE(Log::LogEvent(0,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(1,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(2,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(3,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::ERROR,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::WARN,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::DEBUG,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::TRAFFIC,"This should work"));
 	EXPECT_TRUE(Log::Finalize());
 	
 	EXPECT_TRUE(Log::Initialize(1));
-	EXPECT_TRUE(Log::LogEvent(0,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(1,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(2,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(3,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::ERROR,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::WARN,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::DEBUG,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::TRAFFIC,"This should work"));
 	EXPECT_TRUE(Log::Finalize());
 	
 	EXPECT_TRUE(Log::Initialize(2));
-	EXPECT_TRUE(Log::LogEvent(0,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(1,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(2,"This should work"));
-	EXPECT_TRUE(Log::LogEvent(3,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::ERROR,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::WARN,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::DEBUG,"This should work"));
+	EXPECT_TRUE(Log::LogEvent(Log::TRAFFIC,"This should work"));
 	EXPECT_TRUE(Log::Finalize());
 }

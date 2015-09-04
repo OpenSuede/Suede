@@ -9,6 +9,12 @@ FILE * Log::SysLogFile = NULL;
 FILE * Log::TrafficLogFile = NULL;
 bool Log::LogToConsole = false;
 bool Log::LogTraffic = true;
+
+int Log::ERROR = 0;
+int Log::WARN = 1;
+int Log::DEBUG = 2;
+int Log::TRAFFIC = 3;
+
 time_t Log::t = time(0);
 struct tm * Log::SysTime = localtime(&t);
 char Log::FormattedTime[80];
@@ -115,6 +121,7 @@ bool Log::LogEvent(int MType, const char * Msg)
 	
 	if ((SysLogFile == NULL) and (LogToConsole == false))
 	{
+		std::cerr << "[Fault]: Attempted to log to an uninitialized logger" << std::endl;
 		return false;
 	}
 	
