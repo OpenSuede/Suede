@@ -8,7 +8,11 @@ using std::string;
  * Getter for webSocketKey
  * @return webSocketKey String webSocketKey member data
  */
+<<<<<<< HEAD
 const string& HTTP_Request::getWebSocketKeyFieldValue() const
+=======
+const string& HTTP_Request::getWebSocketKey() const
+>>>>>>> eaffd207ca018a3ef28fb95d2fe40bf265047661
 {
 	return webSocketKeyFieldValue;
 }
@@ -18,6 +22,7 @@ const string& HTTP_Request::getWebSocketKeyFieldValue() const
  * @param key string object that will be set as webSocketKey
  * @return void
  */
+<<<<<<< HEAD
 void HTTP_Request::setWebSocketKeyFieldValue(const string& fieldValue)
 {
 	webSocketKeyFieldValue = fieldValue;
@@ -40,6 +45,11 @@ const string& HTTP_Request::getUpgradeFieldValue() const
 void HTTP_Request::setUpgradeFieldValue(const string& fieldValue)
 {
 	upgradeFieldValue = fieldValue;
+=======
+void HTTP_Request::setWebSocketKey(const string& key)
+{
+	webSocketKey = key;
+>>>>>>> eaffd207ca018a3ef28fb95d2fe40bf265047661
 }
 
 
@@ -85,12 +95,17 @@ HTTP_Request *HTTP_Request::buildRequestFromBuffer(unsigned const char* const da
 	std::istringstream stringStream(httpString);
     std::string line;
     while (std::getline(stringStream, line)) {
+<<<<<<< HEAD
 		if (line.find("Connection: ") == 0) {
 			request->setConnectionFieldValue(line.substr(12, line.size() - 13));
 		}else if (line.find("Upgrade: ") == 0) {
 			request->setUpgradeFieldValue(line.substr(19, line.size() - 10));
 		}else if (line.find("Sec-WebSocket-Key: ") == 0) {
 			request->setWebSocketKeyFieldValue(line.substr(19, 24));
+=======
+		if (line.find("Sec-WebSocket-Key: ") == 0) {
+			request->setWebSocketKey(line.substr(19, 24));
+>>>>>>> eaffd207ca018a3ef28fb95d2fe40bf265047661
 			//seems like this always work but may need to change to something like line.substr(19, line.size() - 20)
 		}
     }
