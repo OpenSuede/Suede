@@ -55,7 +55,7 @@ string HTTP_Response::generateWebSocketAcceptVal(const string& clientKey)
 HTTP_Response* HTTP_Response::buildResponseToRequest(const HTTP_Request *request)
 {
     HTTP_Response *response = new HTTP_Response();
-    string clientKey = request->getWebSocketKeyField();
+    string clientKey = request->getWebSocketKeyFieldValue();
     string generatedKey = generateWebSocketAcceptVal(clientKey);
 	//TODO: don't use setResponseString, build a real HTTP_Response object that can be used for other things
     //response->setResponseString("HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: "+ generatedKey +"\r\nSec-WebSocket-Protocol: chat\r\n\r\n");

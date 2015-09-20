@@ -8,16 +8,20 @@ class HTTP_Request
 private:
     string method;
     string resourceRequested;
-    string host;
-    string upgrade;
-    string connection;
-    string webSocketKey;
-    string webSocketProtocol;
-    string webSocketVersion;
-    string origin;
+    string hostFieldValue;
+    string upgradeFieldValue;
+    string connectionFieldValue;
+    string webSocketKeyFieldValue;
+    string webSocketProtocolFieldValue;
+    string webSocketVersionFieldValue;
+    string originFieldValue;
 public:
-    const string& getWebSocketKey() const;
-    void setWebSocketKey(const string&);
+    const string& getWebSocketKeyFieldValue() const;
+    void setWebSocketKeyFieldValue(const string&);
+	const string& getUpgradeFieldValue() const;
+    void setUpgradeFieldValue(const string&);
+	const string& getConnectionFieldValue() const;
+    void setConnectionFieldValue(const string&);
     static HTTP_Request* buildRequestFromBuffer(unsigned const char* const); // Factory Method
 };
 

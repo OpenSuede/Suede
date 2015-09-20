@@ -8,9 +8,9 @@ using std::string;
  * Getter for webSocketKey
  * @return webSocketKey String webSocketKey member data
  */
-const string& HTTP_Request::getWebSocketKeyField() const
+const string& HTTP_Request::getWebSocketKeyFieldValue() const
 {
-	return webSocketKey;
+	return webSocketKeyFieldValue;
 }
 
 /**
@@ -18,7 +18,7 @@ const string& HTTP_Request::getWebSocketKeyField() const
  * @param key string object that will be set as webSocketKey
  * @return void
  */
-void HTTP_Request::setWebSocketKeyField(const string& fieldValue)
+void HTTP_Request::setWebSocketKeyFieldValue(const string& fieldValue)
 {
 	webSocketKeyFieldValue = fieldValue;
 }
@@ -27,7 +27,7 @@ void HTTP_Request::setWebSocketKeyField(const string& fieldValue)
  * Getter for Upgrade Field
  * @return upgradeFieldValue String upgradeFieldValue member data
  */
-const string& HTTP_Request::getUpgradeField() const
+const string& HTTP_Request::getUpgradeFieldValue() const
 {
 	return upgradeFieldValue;
 }
@@ -37,9 +37,29 @@ const string& HTTP_Request::getUpgradeField() const
  * @param fieldValue string object that will be set as upgradeFieldValue
  * @return void
  */
-void HTTP_Request::setUpgradeField(const string& fieldValue)
+void HTTP_Request::setUpgradeFieldValue(const string& fieldValue)
 {
 	upgradeFieldValue = fieldValue;
+}
+
+
+/**
+ * Getter for Connection Field
+ * @return upgradeFieldValue String upgradeFieldValue member data
+ */
+const string& HTTP_Request::getConnectionFieldValue() const
+{
+	return connectionFieldValue;
+}
+
+/**
+ * Setter for Connection Field
+ * @param fieldValue string object that will be set as upgradeFieldValue
+ * @return void
+ */
+void HTTP_Request::setConnectionFieldValue(const string& fieldValue)
+{
+	connectionFieldValue = fieldValue;
 }
 
 /**
@@ -63,13 +83,14 @@ HTTP_Request *HTTP_Request::buildRequestFromBuffer(unsigned const char* const da
     string httpString((char*)data); // May not be a safe typecast since unsigned version may not have null terminator
 	HTTP_Request *request = new HTTP_Request();
 	std::istringstream stringStream(httpString);
-    std::string line;    
+    std::string line;
     while (std::getline(stringStream, line)) {
-		if (line.find("Sec-WebSocket-Key: ") == 0) {
-			request->setWebSocketKeyField(line.substr(19, 24));
-			//seems like this always work but may need to change to something like line.substr(19, line.size() - 20)
+		if (line.find("Connection: ") == 0) {
+			request->setConnectionFieldValue(line.substr(12, line.size() - 13));
+		}else if (line.find("Upgrade: ") == 0) {
+			request->setUpgradeFieldValue(line.substr(19, line.size() - 10));
 		}else if (line.find("Sec-WebSocket-Key: ") == 0) {
-			request->setWebSocketKeyField(line.substr(19, 24));
+			request->setWebSocketKeyFieldValue(line.substr(19, 24));
 			//seems like this always work but may need to change to something like line.substr(19, line.size() - 20)
 		}
     }
