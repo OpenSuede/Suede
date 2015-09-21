@@ -7,8 +7,12 @@ class Socket_Connection
 {
 private:
     struct sockaddr* cli_addr;
+	int connectionStatus;
+	struct tm* timeOfLastHeartBeat;
 public:
     Socket_Connection( struct sockaddr*);
+	const string& getIPAddress() const;
+	bool updateTimeOfLastHeartBeat();
 };
 
 #endif

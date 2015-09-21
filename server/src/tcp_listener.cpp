@@ -20,7 +20,7 @@
 #include <arpa/inet.h>
 using std::string;
 
-void listenToConnectedSocket(int socketfd)
+void listenToConnectedSocket(int socketfd)//TODO:  Add socket Connection Object as Arg
 {
 	try
     {
@@ -76,8 +76,10 @@ void TCP_Listener::listenForTCPConnections()
         } else if(System_Signal::exitActivated() == true){
             return;
         }
+		//TODO: Create Socket Connection and pass cli_addr into constructor
+		//TODO: Register connection with resource manager
 		Log::LogEvent(Log::DEBUG, "Connection established to: " + string(inet_ntoa(cli_addr.sin_addr)));
-        std::thread* establishedConnectionThread = new std::thread(listenToConnectedSocket, newsockfd);
+        std::thread* establishedConnectionThread = new std::thread(listenToConnectedSocket, newsockfd);//TODO: Add socket Connection Object as Arg
         connectedThreads.push_back(establishedConnectionThread);
     }
 }

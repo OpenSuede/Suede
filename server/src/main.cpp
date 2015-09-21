@@ -21,6 +21,8 @@ int main( int argc, char *argv[] )
 	
 	std::thread inputListenerThread([](){User_Input_Listener();});//Start listener input on separate thread
 	
+	//Start Resources Manager on new thread
+	
     try
     {
         TCP_Listener listener; //Start listening for connections, blocks until system exit or failure
