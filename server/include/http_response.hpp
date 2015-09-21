@@ -7,18 +7,12 @@ using std::string;
 class HTTP_Response
 {
 private:
-	string method;
-	string resourceRequested;
-	string host;
-	string upgrade;
-	string connection;
-	string webSocketKey;
-	string webSocketProtocol;
-	string webSocketVersion;
-	string origin;
+	string statusCode;
 	string responseString; // temporary
 	static string generateWebSocketAcceptVal(const string&);
 public:
+	const string& getStatusCode() const;
+    void setStatusCode(const string&);
 	static void base64(unsigned char const*, int, char**);
 	const string& toString() const;
 	void setResponseString(const string&); // temporary

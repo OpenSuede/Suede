@@ -2,7 +2,7 @@
 #include "gtest/gtest.h"
 
 TEST(Log, Uninitialized) {
-	EXPECT_FALSE(Log::LogEvent(0,"Bad Msg, Uninitialized Logger"));
+	EXPECT_FALSE(Log::LogEvent(Log::ERROR,"Bad Msg, Uninitialized Logger"));
 	EXPECT_FALSE(Log::Finalize());
 }
 

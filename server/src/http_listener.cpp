@@ -1,7 +1,7 @@
 #include <http_listener.hpp>
 #include <http_request.hpp>
 #include <http_response.hpp>
-#include <websocket_frame.hpp>
+#include <websocket_listener.hpp>
 #include <socket_connection.hpp>
 #include <log.hpp>
 #include <netdb.h>
@@ -32,7 +32,7 @@ void HTTP_Listener::listenForHTTPRequests()
 		exit(1);
 	}
 
-	Log::LogEvent(2,"Incoming HTTP message: " + string((const char*) buffer));
+	Log::LogEvent(Log::DEBUG,"Incoming HTTP message: " + string((const char*) buffer));
 
 	HTTP_Request *request = HTTP_Request::buildRequestFromBuffer(buffer);
 
@@ -41,13 +41,23 @@ void HTTP_Listener::listenForHTTPRequests()
 	string responseString = response->toString();
 	n = write(socketFileDescriptor, responseString.c_str(), responseString.size());
 
-	Log::LogEvent(2,"HTTP Response: " + responseString);
+	Log::LogEvent(Log::DEBUG,"HTTP Response: " + responseString);
 
 	if (n < 0){
 		Log::LogEvent(0,"ERROR writing to socket");
 		exit(1);
 	}
-
+	
+	//If Request protocol upgrade
+	try
+    {
+        Websocket_Listener webSocketListener(socketFileDescriptor);
+    }
+    catch (std::exception& e)
+    {
+		Log::LogEvent(Log::ERROR, e.what());
+    }
+	
 	delete request;
     delete response;
 }

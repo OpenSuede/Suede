@@ -7,7 +7,9 @@ class HTTP_Request
 {
 private:
     string method;
-    string resourceRequested;
+	bool isRequestValid;
+    string resourcePath;
+	string protocolVersion;
     string hostFieldValue;
     string upgradeFieldValue;
     string connectionFieldValue;
@@ -16,7 +18,15 @@ private:
     string webSocketVersionFieldValue;
     string originFieldValue;
 public:
+	const string& getMethod() const;
+    void setMethod(const string&);
+	const bool isValid() const;
+    void setValid(const bool);
+	const string& getResourcePath() const;
+    void setResourcePath(const string&);
     const string& getWebSocketKeyFieldValue() const;
+	void setProtocolVersion(const string&);
+    const string& getProtocolVersion() const;
     void setWebSocketKeyFieldValue(const string&);
 	const string& getUpgradeFieldValue() const;
     void setUpgradeFieldValue(const string&);

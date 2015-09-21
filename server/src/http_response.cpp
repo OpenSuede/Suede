@@ -9,6 +9,25 @@
 #include <string>
 using std::string;
 
+/**
+ * Getter for statusCode
+ * @return response status code as a string
+ */
+const string& HTTP_Response::getStatusCode() const
+{
+	return statusCode;
+}
+
+/**
+ * Setter for statusCode
+ * @param response status code as a string
+ * @return void
+ */
+void HTTP_Response::setStatusCode(const string& code)
+{
+	statusCode = code;
+}
+
 //Sort of based on solution from stack overflow, may need rewrite as it seems to have memory leak in valgrind
 void HTTP_Response::base64(unsigned char const* input, int length, char** buffer)
 {
@@ -55,11 +74,12 @@ string HTTP_Response::generateWebSocketAcceptVal(const string& clientKey)
 HTTP_Response* HTTP_Response::buildResponseToRequest(const HTTP_Request *request)
 {
     HTTP_Response *response = new HTTP_Response();
-<<<<<<< HEAD
+	if(!request->isValid()) {
+		response->setStatusCode("400");
+		//TODO: Add explanation of failure to body (custom reason-phrase)
+		return response;
+	}
     string clientKey = request->getWebSocketKeyFieldValue();
-=======
-    string clientKey = request->getWebSocketKey();
->>>>>>> eaffd207ca018a3ef28fb95d2fe40bf265047661
     string generatedKey = generateWebSocketAcceptVal(clientKey);
 	//TODO: don't use setResponseString, build a real HTTP_Response object that can be used for other things
     //response->setResponseString("HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: "+ generatedKey +"\r\nSec-WebSocket-Protocol: chat\r\n\r\n");

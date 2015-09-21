@@ -1,7 +1,21 @@
+#include "http_request.hpp"
 #include "http_response.hpp"
 #include "gtest/gtest.h"
 #include "string"
 
+TEST(HTTP_Response, StatusCodeGetSet) {
+	HTTP_Response response;
+	response.setStatusCode("200");
+	EXPECT_EQ("200", response.getStatusCode());
+}
+
+TEST(HTTP_Response, MalformedRequest) {
+	HTTP_Request request;
+	request.setValid(false);
+	HTTP_Response *response = HTTP_Response::buildResponseToRequest(&request);
+	EXPECT_EQ("400", response->getStatusCode());
+	delete response;
+}
 
 TEST(HTTP_Response, Base64_Basic) {
 	char* outBuffer = NULL;

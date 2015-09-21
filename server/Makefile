@@ -34,10 +34,7 @@ runtest: test
 	
 folders:
 	mkdir -p $(BIN_PATH) $(BUILD_PATH) $(LOG_PATH)
-<<<<<<< HEAD
-	sudo ln -sf $(LOG_PATH) $(BIN_PATH)/$(LOG_PATH)
-=======
->>>>>>> eaffd207ca018a3ef28fb95d2fe40bf265047661
+	ln -sf $(LOG_PATH) $(BIN_PATH)/$(LOG_PATH)
 	
 clean:
 	rm -f $(BUILD_PATH)/*.o $(BIN_PATH)/$(APPLICATION_NAME) $(LOG_PATH)/*.log

@@ -5,14 +5,86 @@
 using std::string;
 
 /**
+ * Getter for method
+ * @return method type as string
+ */
+const string& HTTP_Request::getMethod() const
+{
+	return method;
+}
+
+/**
+ * Setter for method
+ * @param key string object that will be set as method
+ * @return void
+ */
+void HTTP_Request::setMethod(const string& methodIn)
+{
+	method = methodIn;
+}
+
+/**
+ * valid request check
+ * @return request validity as a boolean
+ */
+const bool HTTP_Request::isValid() const
+{
+	return isRequestValid;
+}
+
+/**
+ * Setter for isValid
+ * @param request validity as a boolean
+ * @return void
+ */
+void HTTP_Request::setValid(const bool validity)
+{
+	isRequestValid = validity;
+}
+
+/**
+ * Getter for ResourcePath
+ * @return ResourcePath type as string
+ */
+const string& HTTP_Request::getResourcePath() const
+{
+	return resourcePath;
+}
+
+/**
+ * Setter for ResourcePath
+ * @param key string object that will be set as ResourcePath
+ * @return void
+ */
+void HTTP_Request::setResourcePath(const string& resource)
+{
+	resourcePath = resource;
+}
+
+/**
+ * Getter for protocolVersion
+ * @return protocolVersion type as string
+ */
+const string& HTTP_Request::getProtocolVersion() const
+{
+	return protocolVersion;
+}
+
+/**
+ * Setter for protocolVersion
+ * @param key string object that will be set as protocolVersion
+ * @return void
+ */
+void HTTP_Request::setProtocolVersion(const string& version)
+{
+	protocolVersion = version;
+}
+
+/**
  * Getter for webSocketKey
  * @return webSocketKey String webSocketKey member data
  */
-<<<<<<< HEAD
 const string& HTTP_Request::getWebSocketKeyFieldValue() const
-=======
-const string& HTTP_Request::getWebSocketKey() const
->>>>>>> eaffd207ca018a3ef28fb95d2fe40bf265047661
 {
 	return webSocketKeyFieldValue;
 }
@@ -22,7 +94,6 @@ const string& HTTP_Request::getWebSocketKey() const
  * @param key string object that will be set as webSocketKey
  * @return void
  */
-<<<<<<< HEAD
 void HTTP_Request::setWebSocketKeyFieldValue(const string& fieldValue)
 {
 	webSocketKeyFieldValue = fieldValue;
@@ -45,11 +116,6 @@ const string& HTTP_Request::getUpgradeFieldValue() const
 void HTTP_Request::setUpgradeFieldValue(const string& fieldValue)
 {
 	upgradeFieldValue = fieldValue;
-=======
-void HTTP_Request::setWebSocketKey(const string& key)
-{
-	webSocketKey = key;
->>>>>>> eaffd207ca018a3ef28fb95d2fe40bf265047661
 }
 
 
@@ -92,20 +158,39 @@ HTTP_Request *HTTP_Request::buildRequestFromBuffer(unsigned const char* const da
 {
     string httpString((char*)data); // May not be a safe typecast since unsigned version may not have null terminator
 	HTTP_Request *request = new HTTP_Request();
+	request->setValid(true);
 	std::istringstream stringStream(httpString);
     std::string line;
+	std::getline(stringStream, line);
+	if (line.find("GET") == 0) {
+		request->setMethod("GET");
+	}else if (line.find("POST") == 0) {
+		request->setMethod("POST");
+	}else if (line.find("DELETE") == 0) {
+		request->setMethod("DELETE");
+	}else if (line.find("PUT") == 0) {
+		request->setMethod("PUT");
+	}else if (line.find("HEAD") == 0) {
+		request->setMethod("HEAD");
+	} else {
+		request->setValid(false);
+	}
+	
+	int start = line.find(" ") + 1;
+	int len = line.find(" ", start) - start;
+	request->setResourcePath(line.substr(start, len));
+	
+	start += len;
+	len = line.find("/r", start) - start;
+	request->setProtocolVersion(line.substr(start, len));
+	
     while (std::getline(stringStream, line)) {
-<<<<<<< HEAD
 		if (line.find("Connection: ") == 0) {
 			request->setConnectionFieldValue(line.substr(12, line.size() - 13));
 		}else if (line.find("Upgrade: ") == 0) {
 			request->setUpgradeFieldValue(line.substr(19, line.size() - 10));
 		}else if (line.find("Sec-WebSocket-Key: ") == 0) {
 			request->setWebSocketKeyFieldValue(line.substr(19, 24));
-=======
-		if (line.find("Sec-WebSocket-Key: ") == 0) {
-			request->setWebSocketKey(line.substr(19, 24));
->>>>>>> eaffd207ca018a3ef28fb95d2fe40bf265047661
 			//seems like this always work but may need to change to something like line.substr(19, line.size() - 20)
 		}
     }
